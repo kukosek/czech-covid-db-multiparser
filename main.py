@@ -22,7 +22,7 @@ try:
         result = parsing.parse(pathToConfirmedCsv, pathToRecoveredCsv, pathToDeathsCsv, pathToCurrentNumbers)
         if result == True:
             logging.info("Running update command")
-            logging.info()
+            logging.info("")
             
             logging.info(subprocess.run(updateCommand.split(), capture_output=True).stdout)
         time.sleep(checkWaitTime)

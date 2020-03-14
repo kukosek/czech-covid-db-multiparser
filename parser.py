@@ -11,7 +11,7 @@ import logging
 
 class Parser:
     datetimeFormat = "%Y-%m-%dT%H:%M:%S+01:00"
-    columnNames = ["Record number", "Date", "All", "hlavní město Praha",
+    columnNames = ["Record number", "Date", "All", "Hlavní město Praha",
                    "Středočeský kraj", "Ústecký kraj", "Královéhradecký kraj",
                    "Zlínský kraj", "Olomoucký kraj", "Pardubický kraj",
                    "Kraj Vysočina", "Plzeňský kraj", "Jihomoravský kraj",
@@ -57,7 +57,7 @@ class Parser:
                 for row in rows:
                     writer.writerow(row)
         if (newInformation == True):
-            logging.info("New info, saving to", pathToCsv)
+            logging.info("New info, saving to "+pathToCsv)
             if datetimeObj.date() == datetime.today().date():
                 datetimeObj = datetime.now()
             elif datetimeObj.date() < datetime.today().date():
@@ -99,69 +99,78 @@ class Parser:
             fp.close
         except urllib.HTTPError as e:
             logging.error('HTTPError = ' + str(e.code))
+            return False
         except urllib.URLError as e:
             logging.error('URLError = ' + str(e.reason))
+            return False
         except httplib.HTTPException as e:
             logging.error('HTTPException')
+            return False
         
-        soup = BeautifulSoup(html, 'html.parser')
-
+        try:
+            soup = BeautifulSoup(html, 'html.parser')
+        except Exception as e:
+            logging.error("BeatifulSoupException:\n"+str(e.reason))
         all = {"confirmed":{"number":"", "date":""},
               "recovered":{"number":"", "date":""},
               "deaths":     {"number":"", "date":""}}
         update = False
-        # parsing current numbers
-        confirmedPerKraj = {}
-        for trTag in soup.find_all('tr'):
-            allThTags = trTag.find_all('th')
-            if len(allThTags) == 1:
-                if allThTags[0].get_text() == "Rozšíření":
-                    textRozsireni = trTag.find_all("td")[0].get_text()[:-9].replace("," , ";")
-                    infoPerKraj = textRozsireni.split(";")
-                    for krajInfo in infoPerKraj:
-                        krajName, confirmedInKraj = krajInfo.split("(")
-                        krajName = krajName.strip()
-                        confirmedInKraj = confirmedInKraj[:-1].strip()
-                        confirmedPerKraj[krajName] = confirmedInKraj
-                if allThTags[0].get_text() == "Nakažení":
-                    textConfirmed = trTag.find_all("td")[0].get_text()
-                    num, date = textConfirmed.split("(",2)
-                    num = num.strip()
-                    date = date.strip().replace("(", "").replace(")", "")
-                    dateobject = datetime.strptime(date, "%d. %B %Y")
-                    all["confirmed"]["number"]=num
-                    datetimeConverted = dateobject.strftime(self.datetimeFormat)
-                    all["confirmed"]["date"]=datetimeConverted
-                    
-                    # here comes csv handling
-                    appended = self.csvAppendIfNew(dateobject, num, confirmedPerKraj, pathToConfirmedCSV)
-                    if appended: update = True
-                if allThTags[0].get_text() == "Zotavení":
-                    textConfirmed = trTag.find_all("td")[0].get_text()
-                    num, date = textConfirmed.split("(",2)
-                    num = num.strip()
-                    date = date.strip().replace("(", "").replace(")", "")
-                    dateobject = datetime.strptime(date, "%d. %B %Y")
-                    all["recovered"]["number"]=num
-                    datetimeConverted = dateobject.strftime(self.datetimeFormat)
-                    all["recovered"]["date"]=datetimeConverted
-                    # here comes csv handling
-                    appended = self.csvAppendIfNew(dateobject, num, None, pathToRecoveredCSV)
-                    if appended: update = True
-                if allThTags[0].get_text() == "Úmrtí":
-                    textConfirmed = trTag.find_all("td")[0].get_text()
-                    num, date = textConfirmed.split("(",2)
-                    num = num.strip()
-                    date = date.strip().replace("(", "").replace(")", "")
-                    dateobject = datetime.strptime(date, "%d. %B %Y")
-                    all["deaths"]["number"]=num
-                    datetimeConverted = dateobject.strftime(self.datetimeFormat)
-                    all["deaths"]["date"]=datetimeConverted
-                    # here comes csv handling
-                    appended = self.csvAppendIfNew(dateobject, num, None, pathToDeathsCSV)
-                    if appended: update = True
-                if (update):
-                    pass
+        try:
+            # parsing current numbers
+            confirmedPerKraj = {}
+            for trTag in soup.find_all('tr'):
+                allThTags = trTag.find_all('th')
+                if len(allThTags) == 1:
+                    if allThTags[0].get_text() == "Rozšíření":
+                        textRozsireni = trTag.find_all("td")[0].get_text().split('[')[0][:-1].replace("," , ";").replace(":", ";")
+                        infoPerKraj = textRozsireni.split(";")
+                        for krajInfo in infoPerKraj:
+                            krajName, confirmedInKraj = krajInfo.split("(")
+                            krajName = krajName.strip()
+                            confirmedInKraj = confirmedInKraj[:-1].strip()
+                            confirmedPerKraj[krajName] = confirmedInKraj
+                    if allThTags[0].get_text() == "Nakažení":
+                        textConfirmed = trTag.find_all("td")[0].get_text()
+                        num, date = textConfirmed.split("(",2)
+                        num = num.strip()
+                        date = date.strip().replace("(", "").replace(")", "")
+                        dateobject = datetime.strptime(date, "%d. %B %Y")
+                        all["confirmed"]["number"]=num
+                        datetimeConverted = dateobject.strftime(self.datetimeFormat)
+                        all["confirmed"]["date"]=datetimeConverted
+                        
+                        # here comes csv handling
+                        appended = self.csvAppendIfNew(dateobject, num, confirmedPerKraj, pathToConfirmedCSV)
+                        if appended: update = True
+                    if allThTags[0].get_text() == "Zotavení":
+                        textConfirmed = trTag.find_all("td")[0].get_text()
+                        num, date = textConfirmed.split("(",2)
+                        num = num.strip()
+                        date = date.strip().replace("(", "").replace(")", "")
+                        dateobject = datetime.strptime(date, "%d. %B %Y")
+                        all["recovered"]["number"]=num
+                        datetimeConverted = dateobject.strftime(self.datetimeFormat)
+                        all["recovered"]["date"]=datetimeConverted
+                        # here comes csv handling
+                        appended = self.csvAppendIfNew(dateobject, num, None, pathToRecoveredCSV)
+                        if appended: update = True
+                    if allThTags[0].get_text() == "Úmrtí":
+                        textConfirmed = trTag.find_all("td")[0].get_text()
+                        num, date = textConfirmed.split("(",2)
+                        num = num.strip()
+                        date = date.strip().replace("(", "").replace(")", "")
+                        dateobject = datetime.strptime(date, "%d. %B %Y")
+                        all["deaths"]["number"]=num
+                        datetimeConverted = dateobject.strftime(self.datetimeFormat)
+                        all["deaths"]["date"]=datetimeConverted
+                        # here comes csv handling
+                        appended = self.csvAppendIfNew(dateobject, num, None, pathToDeathsCSV)
+                        if appended: update = True
+                    if (update):
+                        pass
+        except:
+            logging.error("Unexpected error:\n"+str(sys.exc_info()[0]))
+            raise
         if(update):
             with open(pathToCurrentNumbersJSON, "w+") as jsonfile:
                 json.dump(all, jsonfile)
