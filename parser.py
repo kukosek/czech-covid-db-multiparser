@@ -8,6 +8,7 @@ from datetime import datetime
 import csv
 import json
 import logging
+import sys
 
 class Parser:
     datetimeFormat = "%Y-%m-%dT%H:%M:%S+01:00"
@@ -122,8 +123,8 @@ class Parser:
                 allThTags = trTag.find_all('th')
                 if len(allThTags) == 1:
                     if allThTags[0].get_text() == "Rozšíření":
-                        textRozsireni = trTag.find_all("td")[0].get_text().split('[')[0][:-1].replace("," , ";").replace(":", ";")
-                        infoPerKraj = textRozsireni.split(";")
+                        textRozsireni = trTag.find_all("td")[0].get_text()
+                        infoPerKraj = textRozsireni.splitlines()[3:]
                         for krajInfo in infoPerKraj:
                             krajName, confirmedInKraj = krajInfo.split("(")
                             krajName = krajName.strip()
