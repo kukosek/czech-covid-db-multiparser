@@ -9,6 +9,7 @@ import csv
 import json
 import logging
 import sys
+from datetime import timedelta
 
 class Parser:
     datetimeFormat = "%Y-%m-%dT%H:%M:%S+01:00"
@@ -66,7 +67,7 @@ class Parser:
                     lastDateWrited = datetime.strptime(lastRow[1], self.datetimeFormat)
                     if (lastDateWrited.date() == datetimeObj.date()):
                         #place the date in the somewhere in the half
-                        nextDayDatetime = datetimeObj.date() + datetime.timedelta(days=1)
+                        nextDayDatetime = datetimeObj.date() + timedelta(days=1)
                         datetimeObj = lastDateWrited + ( (nextDayDatetime - lastDateWrited) / 2 )
             else:
                 logging.error("Error: time is greater than my time. Are we time travelling?")
@@ -115,6 +116,9 @@ class Parser:
         all = {"confirmed":{"number":"", "date":""},
               "recovered":{"number":"", "date":""},
               "deaths":     {"number":"", "date":""}}
+        with open(pathToCurrentNumbersJSON, "r") as file:
+            fileJson = json.load(file);
+            if len(fileJson) == len(all): all = fileJson
         update = False
         try:
             # parsing current numbers
@@ -137,12 +141,17 @@ class Parser:
                         date = date.strip().replace("(", "").replace(")", "")
                         dateobject = datetime.strptime(date, "%d. %B %Y")
                         all["confirmed"]["number"]=num
-                        datetimeConverted = dateobject.strftime(self.datetimeFormat)
-                        all["confirmed"]["date"]=datetimeConverted
+                        
                         
                         # here comes csv handling
                         appended = self.csvAppendIfNew(dateobject, num, confirmedPerKraj, pathToConfirmedCSV)
-                        if appended: update = True
+                        if appended:
+                            update = True
+                            if dateobject.date() == datetime.today().date():
+                                datetimeConverted = datetime.now().strftime(self.datetimeFormat)
+                            else:
+                                datetimeConverted = dateobject.strftime(self.datetimeFormat)
+                            all["confirmed"]["date"]=datetimeConverted
                     if allThTags[0].get_text() == "Zotavení":
                         textConfirmed = trTag.find_all("td")[0].get_text()
                         num, date = textConfirmed.split("(",2)
@@ -150,11 +159,16 @@ class Parser:
                         date = date.strip().replace("(", "").replace(")", "")
                         dateobject = datetime.strptime(date, "%d. %B %Y")
                         all["recovered"]["number"]=num
-                        datetimeConverted = dateobject.strftime(self.datetimeFormat)
-                        all["recovered"]["date"]=datetimeConverted
+                        
                         # here comes csv handling
                         appended = self.csvAppendIfNew(dateobject, num, None, pathToRecoveredCSV)
-                        if appended: update = True
+                        if appended:
+                            update = True
+                            if dateobject.date() == datetime.today().date():
+                                datetimeConverted = datetime.now().strftime(self.datetimeFormat)
+                            else:
+                                datetimeConverted = dateobject.strftime(self.datetimeFormat)
+                            all["recovered"]["date"]=datetimeConverted
                     if allThTags[0].get_text() == "Úmrtí":
                         textConfirmed = trTag.find_all("td")[0].get_text()
                         num, date = textConfirmed.split("(",2)
@@ -162,11 +176,16 @@ class Parser:
                         date = date.strip().replace("(", "").replace(")", "")
                         dateobject = datetime.strptime(date, "%d. %B %Y")
                         all["deaths"]["number"]=num
-                        datetimeConverted = dateobject.strftime(self.datetimeFormat)
-                        all["deaths"]["date"]=datetimeConverted
+
                         # here comes csv handling
                         appended = self.csvAppendIfNew(dateobject, num, None, pathToDeathsCSV)
-                        if appended: update = True
+                        if appended:
+                            update = True
+                            if dateobject.date() == datetime.today().date():
+                                datetimeConverted = datetime.now().strftime(self.datetimeFormat)
+                            else:
+                                datetimeConverted = dateobject.strftime(self.datetimeFormat)
+                            all["deaths"]["date"]=datetimeConverted
                     if (update):
                         pass
         except:
