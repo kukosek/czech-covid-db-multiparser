@@ -117,8 +117,11 @@ class Parser:
               "recovered":{"number":"", "date":""},
               "deaths":     {"number":"", "date":""}}
         with open(pathToCurrentNumbersJSON, "r") as file:
-            fileJson = json.load(file);
-            if len(fileJson) == len(all): all = fileJson
+            try:
+                fileJson = json.load(file);
+                if len(fileJson) == len(all): all = fileJson
+            except ValueError:
+                pass
         update = False
         try:
             # parsing current numbers
@@ -132,12 +135,12 @@ class Parser:
                         for krajInfo in infoPerKraj:
                             krajName, confirmedInKraj = krajInfo.split("(")
                             krajName = krajName.strip()
-                            confirmedInKraj = confirmedInKraj[:-1].strip()
+                            confirmedInKraj = "".join(filter(str.isdigit, confirmedInKraj[:-1]))
                             confirmedPerKraj[krajName] = confirmedInKraj
                     if allThTags[0].get_text() == "Nakažení":
                         textConfirmed = trTag.find_all("td")[0].get_text()
                         num, date = textConfirmed.split("(",2)
-                        num = num.strip()
+                        num = "".join(filter(str.isdigit, num))
                         date = date.strip().replace("(", "").replace(")", "")
                         dateobject = datetime.strptime(date, "%d. %B %Y")
                         all["confirmed"]["number"]=num
@@ -155,7 +158,7 @@ class Parser:
                     if allThTags[0].get_text() == "Zotavení":
                         textConfirmed = trTag.find_all("td")[0].get_text()
                         num, date = textConfirmed.split("(",2)
-                        num = num.strip()
+                        num = "".join(filter(str.isdigit, num))
                         date = date.strip().replace("(", "").replace(")", "")
                         dateobject = datetime.strptime(date, "%d. %B %Y")
                         all["recovered"]["number"]=num
@@ -172,7 +175,7 @@ class Parser:
                     if allThTags[0].get_text() == "Úmrtí":
                         textConfirmed = trTag.find_all("td")[0].get_text()
                         num, date = textConfirmed.split("(",2)
-                        num = num.strip()
+                        num = "".join(filter(str.isdigit, num))
                         date = date.strip().replace("(", "").replace(")", "")
                         dateobject = datetime.strptime(date, "%d. %B %Y")
                         all["deaths"]["number"]=num
