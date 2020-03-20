@@ -41,7 +41,6 @@ class Parser:
                     rowData.append(row[columnName])
                 rows.append(rowData)
         lastRow = rows[-1]
-        print(casesPerKraj)
         if len(rows) == 0 or (len(rows) == 1 and rows[0][0] == self.columnNames[0]) or (len(rows) > 0 and lastRow[2] != value):
             newInformation = True
         elif casesPerKraj != None:
