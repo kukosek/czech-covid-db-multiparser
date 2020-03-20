@@ -41,6 +41,7 @@ class Parser:
                     rowData.append(row[columnName])
                 rows.append(rowData)
         lastRow = rows[-1]
+        print(casesPerKraj)
         if len(rows) == 0 or (len(rows) == 1 and rows[0][0] == self.columnNames[0]) or (len(rows) > 0 and lastRow[2] != value):
             newInformation = True
         elif casesPerKraj != None:
@@ -129,6 +130,7 @@ class Parser:
             for trTag in soup.find_all('tr'):
                 allThTags = trTag.find_all('th')
                 if len(allThTags) == 1:
+                    """
                     if allThTags[0].get_text() == "Rozšíření":
                         textRozsireni = trTag.find_all("td")[0].get_text()
                         infoPerKraj = textRozsireni.splitlines()[3:]
@@ -137,6 +139,7 @@ class Parser:
                             krajName = krajName.strip()
                             confirmedInKraj = "".join(filter(str.isdigit, confirmedInKraj[:-1]))
                             confirmedPerKraj[krajName] = confirmedInKraj
+                    """
                     if allThTags[0].get_text() == "Nakažení":
                         textConfirmed = trTag.find_all("td")[0].get_text()
                         num, date = textConfirmed.split("(",2)
@@ -147,7 +150,7 @@ class Parser:
                         
                         
                         # here comes csv handling
-                        appended = self.csvAppendIfNew(dateobject, num, confirmedPerKraj, pathToConfirmedCSV)
+                        appended = self.csvAppendIfNew(dateobject, num, None, pathToConfirmedCSV)
                         if appended:
                             update = True
                             if dateobject.date() == datetime.today().date():
