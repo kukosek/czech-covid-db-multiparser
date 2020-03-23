@@ -64,10 +64,11 @@ class Parser:
                 datetimeObj = datetime.now()
             elif datetimeObj.date() < datetime.today().date():
                 if (len(rows) > 0):
+                    datetimeObj.replace(hour=0, minute=0)
                     lastDateWrited = datetime.strptime(lastRow[1], self.datetimeFormat)
                     if (lastDateWrited.date() == datetimeObj.date()):
                         #place the date in the somewhere in the half
-                        nextDayDatetime = datetimeObj.date() + timedelta(days=1)
+                        nextDayDatetime = (datetimeObj + timedelta(days=1)).replace(hour=0, minute=0)
                         datetimeObj = lastDateWrited + ( (nextDayDatetime - lastDateWrited) / 2 )
             else:
                 logging.error("Error: time is greater than my time. Are we time travelling?")
