@@ -281,3 +281,4 @@ class Parser:
                         all["confirmedByAgeGroup"] = lastConfirmedByAgeGroup
             with open(pathToCurrentNumbersJSON, "w+") as jsonfile:
                 json.dump(all, jsonfile)
+            return update
