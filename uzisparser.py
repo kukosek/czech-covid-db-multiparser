@@ -111,6 +111,18 @@ class Parser:
             totalConfirmedColumns = []
             persons = {}
             try:
+                fp = urllib.request.urlopen("https://onemocneni-aktualne.mzcr.cz/api/v1/covid-19/testy.csv")
+                testsStr = fp.read().decode("utf8")
+                fp.close
+                reader = csv.reader(testsStr.replace("\r", "").split('\n'), delimiter=',')
+                with open(pathToTestsCSV, 'w+') as csvfile:
+                    writer = csv.writer(csvfile)
+                    writer.writerow(self.columnNamesRecoveredDeathsTest)
+                    i = 0
+                    for row in reader:
+                        if (i > 0 and len(row) >= 3):
+                            writer.writerow([i, row[0], row[2]])
+                        if len(row) >= 3: i+=1
                 fp = urllib.request.urlopen("https://onemocneni-aktualne.mzcr.cz/api/v1/covid-19/nakaza.csv")
                 totalConfirmedStr = fp.read().decode("utf8")
                 fp.close
