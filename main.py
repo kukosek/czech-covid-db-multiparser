@@ -18,7 +18,7 @@ pathToRecoveredCsv = "/home/pi/korona/czech-covid-db/records_recovered.csv"
 pathToDeathsCsv = "/home/pi/korona/czech-covid-db/records_deaths.csv"
 pathToCurrentNumbers = "/home/pi/korona/czech-covid-db/current_numbers.json"
 
-updateCommand = ""
+updateCommand = "/home/pi/korona/czech-covid-db-wikipediaparser/git_coviddb_update.sh"
 logFile = "main.log"
 
 
