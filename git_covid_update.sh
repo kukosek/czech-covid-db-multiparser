@@ -1,6 +1,6 @@
 #!/bin/bash
 REPO_DIR=/media/lukas/Data/Dokumenty/Programovani_Kodovani_Vsehochut/projects-bigger/korona/czech-covid-db/
-COMMIT_MSG="Automated parse from wikipedia"
+COMMIT_MSG="Automated parse from UZIS and wikipedia"
 LOCAL_BRANCH=master
 REMOTE_NAME=origin
 
