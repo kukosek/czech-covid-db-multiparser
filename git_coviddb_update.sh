@@ -1,6 +1,6 @@
 #!/bin/bash
 REPO_DIR=/home/pi/korona/czech-covid-db/
-COMMIT_MSG="Automated parse from wikipedia"
+COMMIT_MSG="Automated parse from wikipedia/MZCR UZIS"
 LOCAL_BRANCH=master
 REMOTE_NAME=origin
 
