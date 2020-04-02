@@ -13,7 +13,7 @@ from datetime import timedelta
 import csvdbtools
 
 class Parser:
-    datetimeFormat = "%Y-%m-%dT%H:%M:%S+00:00"
+    datetimeFormat = "%Y-%m-%dT%H:%M:%S+02:00"
     columnNames = ["Record number", "Date", "All", "Hlavní město Praha",
                    "Středočeský kraj", "Ústecký kraj", "Královéhradecký kraj",
                    "Zlínský kraj", "Olomoucký kraj", "Pardubický kraj",

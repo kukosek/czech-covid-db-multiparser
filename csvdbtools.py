@@ -3,7 +3,7 @@ import logging
 from datetime import datetime
 from datetime import timedelta
 
-datetimeFormatLong = "%Y-%m-%dT%H:%M:%S+00:00"
+datetimeFormatLong = "%Y-%m-%dT%H:%M:%S+02:00"
 datetimeFormatShort = "%Y-%m-%d"
 columnNamesRecoveredDeathsTest = ["Record number", "Date", "All"]
 def csvAppendIfNew(datetimeObj, value, casesPerKraj, pathToCsv):

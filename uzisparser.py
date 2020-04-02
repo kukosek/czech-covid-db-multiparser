@@ -13,7 +13,7 @@ from datetime import timedelta
 import csvdbtools
 
 class Parser:
-    datetimeFormat = "%Y-%m-%dT%H:%M:%S+00:00"
+    datetimeFormat = "%Y-%m-%dT%H:%M:%S+02:00"
     
     datetimeFormatUzisHtml = "k %d.\xa0%m.\xa0%Y\xa0v\xa0%H.%M\xa0h"
     datetimeFormatUzis = "%Y-%m-%d"
