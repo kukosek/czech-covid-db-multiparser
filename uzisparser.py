@@ -217,15 +217,17 @@ class Parser:
                         importedSum = 0
                         lastImportedPerCountry = {}
                         lastConfirmedByAgeGroup = {"0-17":0,"18-34":0,"35-49":0,"50-67":0,"68-85":0,"86+":0}
+                        
+                        currSum = None
+                        currNumOfKhsReported = None
                         for i in range(1, len(totalConfirmedColumns)):
                             if (len(totalConfirmedColumns[i]) == 3):
                                 if (valuesStarted):
                                     currDate = totalConfirmedColumns[i][0]
-                                    currSum = None
-                                    currNumOfKhsReported = None
                                     if currDate in newInDay:
                                         lastWorkingDate = datetime.strptime(currDate, self.datetimeFormatUzis)
                                         currSum = lastSum + newInDay[currDate]["ageSum"]
+                                        
                                         currNumOfKhsReported = lastNumOfKhsReported + newInDay[currDate]["newConfirmedCases"]["All"]
                                         for key, value in newInDay[currDate]["newConfirmedCases"].items():
                                             if (key != "All"):
