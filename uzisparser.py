@@ -78,12 +78,12 @@ class Parser:
                     fileJson = json.load(file)
                     if len(fileJson) == len(all):
                         all = fileJson
-                        all["confirmedImported"]["number"] = 0
-                        all["confirmedBySex"] = {"male":0, "female":0}
                 except ValueError:
                     pass
         except OSError:
             pass
+        all["confirmedImported"]["number"] = 0
+        all["confirmedBySex"] = {"male":0, "female":0}
         update = False
 
         tested = soup.find(id="count-test").get_text().replace(" ", "")
