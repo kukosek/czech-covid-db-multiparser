@@ -76,7 +76,10 @@ class Parser:
             with open(pathToCurrentNumbersJSON, "r") as file:
                 try:
                     fileJson = json.load(file)
-                    if len(fileJson) == len(all): all = fileJson
+                    if len(fileJson) == len(all):
+                        all = fileJson
+                        all["confirmedImported"]["number"] = 0
+                        all["confirmedBySex"] = {"male":0, "female":0}
                 except ValueError:
                     pass
         except OSError:
