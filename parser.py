@@ -26,7 +26,7 @@ class Parser:
 
     def parse(self, pathToConfirmedCSV, pathToRecoveredCSV, pathToDeathsCSV, pathToCurrentNumbersJSON):
         try:
-            fp = urllib.request.urlopen("https://cs.wikipedia.org/w/api.php?action=parse&page=Pandemie_COVID-19_v_%C4%8Cesku&prop=text&formatversion=2&format=json")
+            fp = urllib.request.urlopen("https://cs.wikipedia.org/w/api.php?action=parse&page=Pandemie_covidu-19_v_%C4%8Cesku&prop=text&formatversion=2&format=json")
             html = json.loads(fp.read().decode("utf8"))["parse"]["text"]
             fp.close
         except urllib.error.HTTPError as e:
