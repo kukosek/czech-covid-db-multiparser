@@ -24,7 +24,6 @@ class Parser:
                    "Liberecký kraj", "Karlovarský kraj", "Moravskoslezský kraj",
                    "Jihočeský kraj"]
     columnNamesRecoveredDeathsTest = ["Record number", "Date", "All"]
-    columnNamesImport = ["Record number", "Date", "All"]
     columnNamesAgeGroups = ["Record number", "Date", "Average age", "0-17","18-34","35-49","50-67","68-85","86+"]
 
     CZNUTS3 = {"CZ010":"Hlavní město Praha",
@@ -47,6 +46,7 @@ class Parser:
         pass
 
     def parse_MZCR(self, pathToTestsCSV, pathToConfirmedCSV,pathToRecoveredCSV, pathToDeathsCSV, pathToImportsCSV, pathToAgeGroupsCSV, pathToCurrentNumbersJSON):
+        columnNamesImport = ["Record number", "Date", "All"]
         try:
             fp = urllib.request.urlopen("https://onemocneni-aktualne.mzcr.cz/covid-19")
             html = fp.read().decode("utf8")
@@ -199,13 +199,13 @@ class Parser:
             all["confirmedAverageAge"] = confirmedAgeSum/len(persons)
 
             importCountriesSorted = list(reversed(sorted(importedByCountry, key=importedByCountry.get)))
-            self.columnNamesImport += importCountriesSorted
+            columnNamesImport += importCountriesSorted
 
             with open(pathToAgeGroupsCSV, 'w+') as csvfile0:
                 agWriter = csv.DictWriter(csvfile0, fieldnames=self.columnNamesAgeGroups)
                 agWriter.writeheader()
                 with open(pathToImportsCSV, 'w+') as csvfile1:
-                    imWriter = csv.DictWriter(csvfile1, fieldnames=self.columnNamesImport)
+                    imWriter = csv.DictWriter(csvfile1, fieldnames=columnNamesImport)
                     imWriter.writeheader()
                     with open(pathToConfirmedCSV, 'w+') as csvfile2:
                         conWriter = csv.DictWriter(csvfile2, fieldnames=self.columnNamesConfirmedUzis)
