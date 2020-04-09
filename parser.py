@@ -71,6 +71,7 @@ class Parser:
                         num, date = textConfirmed.split("(",2)
                         num = "".join(filter(str.isdigit, num))
                         date = date.strip().replace("(", "").replace(")", "")
+                        dateobject = None
                         try:
                             dateobject = datetime.strptime(date, "%d. %B %Y")
                         except ValueError:
@@ -92,6 +93,7 @@ class Parser:
                         num, date = textConfirmed.split("(",2)
                         num = "".join(filter(str.isdigit, num))
                         date = date.strip().replace("(", "").replace(")", "")
+                        dateobject = None
                         try:
                             dateobject = datetime.strptime(date, "%d. %B %Y")
                         except ValueError:
@@ -112,6 +114,7 @@ class Parser:
                         num, date = textConfirmed.split("(",2)
                         num = "".join(filter(str.isdigit, num))
                         date = date.strip().replace("(", "").replace(")", "")
+                        dateobject = None
                         try:
                             dateobject = datetime.strptime(date, "%d. %B %Y")
                         except ValueError:
