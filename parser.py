@@ -75,7 +75,7 @@ class Parser:
                         try:
                             dateobject = datetime.strptime(date, "%d. %B %Y")
                         except ValueError:
-                            pass
+                            return False
                         all["confirmed"]["number"]=num
                         
                         
@@ -97,7 +97,7 @@ class Parser:
                         try:
                             dateobject = datetime.strptime(date, "%d. %B %Y")
                         except ValueError:
-                            pass
+                            return False
                         all["recovered"]["number"]=num
                         
                         # here comes csv handling
@@ -118,7 +118,7 @@ class Parser:
                         try:
                             dateobject = datetime.strptime(date, "%d. %B %Y")
                         except ValueError:
-                            pass
+                            return False
                         all["deaths"]["number"]=num
 
                         # here comes csv handling
