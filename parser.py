@@ -71,7 +71,10 @@ class Parser:
                         num, date = textConfirmed.split("(",2)
                         num = "".join(filter(str.isdigit, num))
                         date = date.strip().replace("(", "").replace(")", "")
-                        dateobject = datetime.strptime(date, "%d. %B %Y")
+                        try:
+                            dateobject = datetime.strptime(date, "%d. %B %Y")
+                        except ValueError:
+                            pass
                         all["confirmed"]["number"]=num
                         
                         
@@ -89,7 +92,10 @@ class Parser:
                         num, date = textConfirmed.split("(",2)
                         num = "".join(filter(str.isdigit, num))
                         date = date.strip().replace("(", "").replace(")", "")
-                        dateobject = datetime.strptime(date, "%d. %B %Y")
+                        try:
+                            dateobject = datetime.strptime(date, "%d. %B %Y")
+                        except ValueError:
+                            pass
                         all["recovered"]["number"]=num
                         
                         # here comes csv handling
@@ -106,7 +112,10 @@ class Parser:
                         num, date = textConfirmed.split("(",2)
                         num = "".join(filter(str.isdigit, num))
                         date = date.strip().replace("(", "").replace(")", "")
-                        dateobject = datetime.strptime(date, "%d. %B %Y")
+                        try:
+                            dateobject = datetime.strptime(date, "%d. %B %Y")
+                        except ValueError:
+                            pass
                         all["deaths"]["number"]=num
 
                         # here comes csv handling
