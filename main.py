@@ -4,7 +4,7 @@ import subprocess
 import time
 import logging
 from datetime import datetime
-checkWaitTime = 20
+checkWaitTime = 60
 pathToTestsUZISCsv = "/home/pi/korona/czech-covid-db/uzis/records_tests_uzis.csv"
 pathToConfirmedUZISCsv = "/home/pi/korona/czech-covid-db/uzis/records_confirmed_uzis.csv"
 pathToRecoveredUZISCsv = "/home/pi/korona/czech-covid-db/uzis/records_recovered_uzis.csv"
