@@ -91,20 +91,28 @@ class Parser:
         recovered = soup.find(id="count-recover").get_text().replace(" ", "")
         deaths = soup.find(id="count-dead").get_text().replace(" ", "")
         if (all["tested"]["number"] != tested or all["confirmed"]["number"] != confirmed or all["recovered"]["number"] != recovered or all["deaths"]["number"] != deaths):
-            datep = soup.find_all("p", class_="h3 mt-10 text--center")
-            datep += soup.find_all("p", class_="h3 mt-10 text--center text--white")
+            datep = soup.find_all("p", class_="h3 mt-10 text--center text--white")
+            datep += soup.find_all("p", class_="h3 mt-10 text--center")
             all["tested"]["number"] = tested
-            all["tested"]["date"] = datetime.strptime(datep[2].get_text(), self.datetimeFormatUzisHtml).strftime(self.datetimeFormat) 
+            dateStr = datep[0].get_text()
+            dateStr = dateStr[dateStr.find('k'):]
+            all["tested"]["date"] = datetime.strptime(dateStr, self.datetimeFormatUzisHtml).strftime(self.datetimeFormat) 
 
             all["confirmed"]["number"] = confirmed
-            all["confirmed"]["date"] = datetime.strptime(datep[3].get_text(), self.datetimeFormatUzisHtml).strftime(self.datetimeFormat)
-
-            recoveredDtObj = datetime.strptime(datep[0].get_text(), self.datetimeFormatUzisHtml)
+            dateStr = datep[1].get_text()
+            dateStr = dateStr[dateStr.find('k'):]
+            all["confirmed"]["date"] = datetime.strptime(dateStr, self.datetimeFormatUzisHtml).strftime(self.datetimeFormat)
+            
+            dateStr = datep[4].get_text()
+            dateStr = dateStr[dateStr.find('k'):]
+            recoveredDtObj = datetime.strptime(dateStr, self.datetimeFormatUzisHtml)
             csvdbtools.csvAppendIfNew(recoveredDtObj, recovered, None, pathToRecoveredCSV)
             all["recovered"]["number"] = recovered
             all["recovered"]["date"] = recoveredDtObj.strftime(self.datetimeFormat)
             
-            deathsDtObj = datetime.strptime(datep[1].get_text(), self.datetimeFormatUzisHtml)
+            dateStr = datep[5].get_text()
+            dateStr = dateStr[dateStr.find('k'):]
+            deathsDtObj = datetime.strptime(dateStr, self.datetimeFormatUzisHtml)
             csvdbtools.csvAppendIfNew(deathsDtObj, deaths, None, pathToDeathsCSV)
             all["deaths"]["number"] = deaths
             all["deaths"]["date"] = datetime.strftime(deathsDtObj, self.datetimeFormat)
