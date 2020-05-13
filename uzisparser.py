@@ -141,7 +141,7 @@ class Parser:
                 for row in reader:
                     totalConfirmedColumns.append(row)
                 fp = urllib.request.urlopen("https://onemocneni-aktualne.mzcr.cz/api/v1/covid-19/osoby.min.json")
-                persons = json.loads(fp.read().decode("utf8"))
+                persons = json.loads(fp.read().decode("utf8"))["data"]
                 fp.close
             except urllib.error.HTTPError as e:
                 logging.error('HTTPError = ' + str(e.code))
