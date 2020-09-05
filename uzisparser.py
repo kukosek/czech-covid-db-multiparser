@@ -242,7 +242,11 @@ class Parser:
                                         currNumOfKhsReported = lastNumOfKhsReported + newInDay[currDate]["newConfirmedCases"]["All"]
                                         for key, value in newInDay[currDate]["newConfirmedCases"].items():
                                             if (key != "All"):
-                                                name = self.CZNUTS3[key]
+                                                name = None
+                                                if key in self.CZNUTS3:
+                                                    name = self.CZNUTS3[key]
+                                                else:
+                                                    name = self.CZNUTS3["CZ010"]
                                                 if name not in lastConfirmedPerRegion: lastConfirmedPerRegion[name] = 0
                                                 lastConfirmedPerRegion[name] += value
                                         for key, value in newInDay[currDate]["newImportedCases"].items():
