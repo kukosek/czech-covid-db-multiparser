@@ -86,10 +86,10 @@ class Parser:
         all["confirmedBySex"] = {"male":0, "female":0}
         update = False
         
-        tested = soup.find(id="count-test").get_text().replace(" ", "").replace("\xa0", "")
-        confirmed = soup.find(id="count-sick").get_text().replace(" ", "").replace("\xa0", "")
-        recovered = soup.find(id="count-recover").get_text().replace(" ", "").replace("\xa0", "")
-        deaths = soup.find(id="count-dead").get_text().replace(" ", "").replace("\xa0", "")
+        tested = int(soup.find(id="count-test").get_text().replace(" ", "").replace("\xa0", ""))
+        confirmed = int(soup.find(id="count-sick").get_text().replace(" ", "").replace("\xa0", ""))
+        recovered = int(soup.find(id="count-recover").get_text().replace(" ", "").replace("\xa0", ""))
+        deaths = int(soup.find(id="count-dead").get_text().replace(" ", "").replace("\xa0", ""))
         if (all["tested"]["number"] != tested or all["confirmed"]["number"] != confirmed or all["recovered"]["number"] != recovered or all["deaths"]["number"] != deaths):
             datep = soup.find_all("p", class_="text--sm text--center")
             
